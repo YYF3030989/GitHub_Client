@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
@@ -16,7 +17,7 @@ import com.example.githubclient.ui.component.GithubUserItem
 import com.example.githubclient.ui.viewmodel.GithubUsersViewModel
 
 @Composable
-fun GithubUserListScreen(viewModel: GithubUsersViewModel) {
+fun GithubUserListScreen(viewModel: GithubUsersViewModel, navController: NavHostController) {
     val users = viewModel.users.collectAsLazyPagingItems()
     LazyColumn(
         modifier = Modifier
@@ -26,6 +27,7 @@ fun GithubUserListScreen(viewModel: GithubUsersViewModel) {
         items(count = users.itemCount, key = users.itemKey { it.id }) { index ->
             GithubUserItem(user = users[index]!!, onClick = {
                 Log.d("MainActivity", "User clicked: ${it.login}")
+                navController.navigate("user/${it.id}/${it.login}")
             })
         }
 
