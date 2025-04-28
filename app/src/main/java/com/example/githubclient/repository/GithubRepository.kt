@@ -8,6 +8,7 @@ import com.example.githubclient.data.Paging.GithubUserPagingSource
 import com.example.githubclient.data.api.GithubApiService
 import com.example.githubclient.data.model.GithubEvent
 import com.example.githubclient.data.model.GithubUser
+import com.example.githubclient.data.model.GithubUserDetail
 import kotlinx.coroutines.flow.Flow
 
 class GithubRepository(private val api: GithubApiService) {
@@ -16,6 +17,10 @@ class GithubRepository(private val api: GithubApiService) {
             config = PagingConfig(pageSize = 30),
             pagingSourceFactory = { GithubUserPagingSource(api) }
         ).flow
+    }
+
+    suspend fun getUserDetail(username: String): GithubUserDetail {
+        return api.getUser(username)
     }
 
     fun getPagedEvent(username: String): Flow<PagingData<GithubEvent>> {

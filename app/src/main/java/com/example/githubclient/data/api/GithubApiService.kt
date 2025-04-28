@@ -2,6 +2,7 @@ package com.example.githubclient.data.api
 
 import com.example.githubclient.data.model.GithubEvent
 import com.example.githubclient.data.model.GithubUser
+import com.example.githubclient.data.model.GithubUserDetail
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -15,7 +16,7 @@ interface GithubApiService {
     ): Response<List<GithubUser>>
 
     @GET("users/{username}")
-    suspend fun getUser(@Path("username") username: String): Response<GithubUser>
+    suspend fun getUser(@Path("username") username: String): GithubUserDetail
 
     @GET("users/{username}/events/public")
     suspend fun getEvents(

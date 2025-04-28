@@ -3,6 +3,7 @@ package com.example.githubclient.data.model
 import com.google.gson.annotations.SerializedName
 
 data class GithubEvent(
+    val id: String,
     val type: String,
     val repo: Repo,
     val payload: Payload,

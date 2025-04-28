@@ -4,7 +4,11 @@ import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,31 +20,44 @@ import androidx.paging.compose.itemKey
 import com.example.githubclient.ui.component.GithubUserItem
 import com.example.githubclient.ui.viewmodel.GithubUsersViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GithubUserListScreen(viewModel: GithubUsersViewModel, navController: NavHostController) {
     val users = viewModel.users.collectAsLazyPagingItems()
-    LazyColumn(
-        modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)
-    ) {
-        items(count = users.itemCount, key = users.itemKey { it.id }) { index ->
-            GithubUserItem(user = users[index]!!, onClick = {
-                Log.d("MainActivity", "User clicked: ${it.login}")
-                navController.navigate("user/${it.id}/${it.login}")
-            })
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            CenterAlignedTopAppBar (
+                title = {
+                    Text ( "Github User List" )
+                }
+            )
         }
-
-        when (users.loadState.append) {
-            is LoadState.Loading -> item {
-                CircularProgressIndicator(modifier = Modifier.padding(16.dp))
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            items(count = users.itemCount, key = users.itemKey { it.id }) { index ->
+                GithubUserItem(user = users[index]!!, onClick = {
+                    Log.d("MainActivity", "User clicked: ${it.login}")
+                    navController.navigate("user/${it.id}/${it.login}")
+                })
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
             }
 
-            is LoadState.Error -> item {
-                Text("Error loading more items")
-            }
+            when (users.loadState.append) {
+                is LoadState.Loading -> item {
+                    CircularProgressIndicator(modifier = Modifier.padding(16.dp))
+                }
 
-            else -> {}
+                is LoadState.Error -> item {
+                    Text("Error loading more items")
+                }
+
+                else -> {}
+            }
         }
-    }
+        }
 }
