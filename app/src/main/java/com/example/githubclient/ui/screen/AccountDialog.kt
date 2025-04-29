@@ -26,10 +26,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Popup
 import coil.compose.AsyncImage
 import com.example.githubclient.R
 import com.example.githubclient.data.model.GithubUser
@@ -66,7 +66,7 @@ fun AccountDialog(
                     if (user?.avatar_url != null) {
                         AsyncImage(
                             model = user.avatar_url,
-                            contentDescription = "User Avatar",
+                            contentDescription = stringResource(R.string.user_avatar),
                             modifier = Modifier
                                 .size(72.dp)
                                 .clip(CircleShape),
@@ -84,7 +84,7 @@ fun AccountDialog(
                     Spacer(modifier = Modifier.height(12.dp))
 
                     Text(
-                        text = user?.login ?: "Loading...",
+                        text = user?.login ?: stringResource(R.string.text_placeholder),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp
                     )
@@ -96,7 +96,7 @@ fun AccountDialog(
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
                     ) {
-                        Text("Logout", color = Color.White)
+                        Text(stringResource(R.string.logout), color = Color.White)
                     }
                 }
             }

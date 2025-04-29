@@ -12,8 +12,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.githubclient.R
 import com.example.githubclient.data.TokenStore
 import com.example.githubclient.ui.viewmodel.AuthViewModel
 
@@ -44,7 +46,7 @@ fun AuthScreen(
                 context.startActivity(intent)
             }
         ) {
-            Text(text = "Login with GitHub")
+            Text(text = stringResource(R.string.github_login_button))
         }
     }
 }

@@ -37,12 +37,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
+import com.example.githubclient.R
 import com.example.githubclient.ui.component.GithubEventItem
 import com.example.githubclient.ui.viewmodel.GithubEventViewModel
 import com.example.githubclient.ui.viewmodel.GithubUserDetailViewModel
@@ -73,7 +75,7 @@ fun GithubUserDetailScreen(
                     Row(verticalAlignment = Alignment.CenterVertically){
                         AsyncImage(
                             model = detail.value?.avatarUrl,
-                            contentDescription = "Avatar",
+                            contentDescription = stringResource(R.string.user_avatar),
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .size(48.dp)
@@ -82,7 +84,7 @@ fun GithubUserDetailScreen(
                         Spacer(Modifier.width(12.dp))
                         Column {
                             Text(
-                                text = detail.value?.login ?: "Loading...",
+                                text = detail.value?.login ?: stringResource(R.string.text_placeholder),
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold
                             )
@@ -93,7 +95,7 @@ fun GithubUserDetailScreen(
                     IconButton(onClick = { onBackClick() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = stringResource(R.string.back)
                         )
                     }
                 },
@@ -108,7 +110,7 @@ fun GithubUserDetailScreen(
             item {
                 detail.value.let {
                     UserDetailHeader(it)
-                } ?: LoadingUserDetailShimmer()
+                }
             }
             when (events.loadState.refresh) {
                 is LoadState.Loading -> {
@@ -128,7 +130,7 @@ fun GithubUserDetailScreen(
                     if (events.itemCount == 0){
                         item {
                             Text(
-                                text = "No events Recently",
+                                text = stringResource(R.string.no_events_recently),
                                 modifier = Modifier.padding(16.dp)
                             )
                         }
@@ -145,7 +147,7 @@ fun GithubUserDetailScreen(
                 is LoadState.Error -> {
                     item {
                         Text(
-                            text = "Error loading events",
+                            text = stringResource(R.string.error_loading_events),
                             color = Color.Red,
                             modifier = Modifier.padding(16.dp)
                         )

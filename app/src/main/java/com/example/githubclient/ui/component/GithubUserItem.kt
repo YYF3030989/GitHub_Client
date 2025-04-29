@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -42,7 +43,7 @@ fun GithubUserItem(user: GithubUser, onClick: (GithubUser) -> Unit) {
                 .crossfade(true)
                 .diskCachePolicy(CachePolicy.ENABLED)
                 .build(),
-            contentDescription = "Avatar",
+            contentDescription = stringResource(R.string.user_avatar),
             contentScale = ContentScale.Crop,
             placeholder = painterResource(R.drawable.baseline_account_circle_24),
             modifier = Modifier

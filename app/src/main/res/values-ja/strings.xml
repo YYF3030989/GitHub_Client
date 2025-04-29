@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_placeholder">ローディング中</string>
+    <string name="github_login_button">GitHubでログイン</string>
+    <string name="back">戻る</string>
+    <string name="no_events_recently">最近のイベントがありません</string>
+    <string name="error_loading_events">イベント読み取りエラー</string>
+    <string name="github_user_list_topbar_text">Githubユーザー一覧</string>
+    <string name="logout">ログアウト</string>
+    <string name="error_loading_more_items">読み取りエラー</string>
+    <string name="event_suffix">イベント</string>
+</resources>

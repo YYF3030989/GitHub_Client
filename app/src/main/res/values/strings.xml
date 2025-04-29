@@ -1,3 +1,16 @@
 <resources>
-    <string name="app_name">GithubClient</string>
+    <string name="app_name" translatable="false">GithubClient</string>
+    <string name="user_avatar" translatable="false">User Avatar</string>
+    <string name="text_placeholder">Loading…</string>
+    <string name="github_login_button">Login with GitHub</string>
+    <string name="back">Back</string>
+    <string name="no_events_recently">No events Recently</string>
+    <string name="error_loading_events">Error loading events</string>
+    <string name="github_user_list_topbar_text">Github User List</string>
+    <string name="logout">Logout</string>
+    <string name="error_loading_more_items">Error loading more items</string>
+    <string name="detail_username" translatable="false">Username: </string>
+    <string name="id" translatable="false">ID: </string>
+    <string name="detail_name" translatable="false">Name: </string>
+    <string name="event_suffix">Event</string>
 </resources>

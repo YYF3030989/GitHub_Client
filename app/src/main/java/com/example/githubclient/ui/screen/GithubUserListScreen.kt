@@ -1,13 +1,11 @@
 package com.example.githubclient.ui.screen
 
 import android.util.Log
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ManageAccounts
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -16,7 +14,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -25,11 +22,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.example.githubclient.R
 import com.example.githubclient.ui.component.GithubUserItem
 import com.example.githubclient.ui.viewmodel.GithubUsersViewModel
 import com.example.githubclient.ui.viewmodel.MainViewModel
@@ -50,14 +49,14 @@ fun GithubUserListScreen(
         topBar = {
             CenterAlignedTopAppBar (
                 title = {
-                    Text ( "Github User List" )
+                    Text (stringResource(R.string.github_user_list_topbar_text))
                 },
                 actions = {
                     IconButton(onClick = {
                         mainViewModel.fetchAuthenticatedUser(context)
                         showDialog = true
                     }) {
-                        Icon(Icons.Default.ManageAccounts, contentDescription = "Logout")
+                        Icon(Icons.Default.ManageAccounts, contentDescription = stringResource(R.string.logout))
                     }
                 }
             )
@@ -82,7 +81,7 @@ fun GithubUserListScreen(
                 }
 
                 is LoadState.Error -> item {
-                    Text("Error loading more items")
+                    Text(stringResource(R.string.error_loading_more_items))
                 }
 
                 else -> {}

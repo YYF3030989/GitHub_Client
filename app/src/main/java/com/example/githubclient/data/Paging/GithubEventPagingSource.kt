@@ -1,5 +1,6 @@
 package com.example.githubclient.data.Paging
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.githubclient.data.api.GithubApiService
@@ -19,6 +20,7 @@ class GithubEventPagingSource(
             if (response.isSuccessful) {
                 val events = response.body() ?: emptyList()
                 val nextSince = extractSinceFromLink(response.headers()["Link"])
+                Log.d("GithubEventPagingSource", "nextSince: $nextSince")
                 LoadResult.Page(
                     data = events,
                     prevKey = null, // GitHub API does not support backward paging
@@ -38,7 +40,7 @@ class GithubEventPagingSource(
 
     private fun extractSinceFromLink(LinkHeader: String?): Int? {
         if (LinkHeader == null) return null
-        val regex = Regex("""<[^>]*[?&]since=(\d+)[^>]*>; rel="next"""")
+        val regex = Regex("""<[^>]*[?&]page=(\d+)[^>]*>; rel="next"""")
         return regex.find(LinkHeader)?.groupValues?.get(1)?.toIntOrNull()
     }
 }

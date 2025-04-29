@@ -21,8 +21,8 @@ interface GithubApiService {
     @GET("users/{username}/events/public")
     suspend fun getEvents(
         @Path("username") username: String,
-        @Query("since") since: Int = 1,
-        @Query("per_page") perPage: Int = 10
+        @Query("page") since: Int = 0,
+        @Query("per_page") perPage: Int = 30
     ): Response<List<GithubEvent>>
 
     @GET("user")
