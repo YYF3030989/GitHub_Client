@@ -9,10 +9,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.githubclient.BuildConfig
 import com.example.githubclient.ui.common.GithubAuthConstants
 import com.example.githubclient.data.TokenStore
+import com.example.githubclient.data.api.AuthInterceptor
 import com.example.githubclient.data.api.GitHubAuthService
+import com.example.githubclient.data.api.GithubApiService
+import com.example.githubclient.data.api.RetrofitClient
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -29,8 +34,18 @@ class AuthViewModel(application: Application)  : AndroidViewModel(application) {
         }
     }
 
+    private val logging = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
+
+    private val client = OkHttpClient.Builder()
+        .addInterceptor(logging)
+        .addInterceptor(AuthInterceptor())
+        .build()
+
     private val authApi: GitHubAuthService = Retrofit.Builder()
         .baseUrl("https://github.com/")
+        .client(client) // attach the logging client
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(GitHubAuthService::class.java)

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -13,25 +14,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import com.example.githubclient.data.TokenStore
 import com.example.githubclient.ui.viewmodel.AuthViewModel
 
 @Composable
 fun AuthScreen(
-    navController: NavController, authViewModel: AuthViewModel = viewModel()
+    authViewModel: AuthViewModel = viewModel(),
+    onLoginSuccess: () -> Unit
 ) {
     val context = LocalContext.current
     val token by authViewModel.accessToken.collectAsState()
 
-    // Navigate to main screen if token is available
-//    LaunchedEffect(token) {
-//        Log.d("AuthScreen", "Token: $token")
-//        if (!token.isNullOrEmpty()) {
-//            navController.navigate("users") {
-//                popUpTo("auth") { inclusive = true } // Remove AuthScreen from back stack
-//            }
-//        }
-//    }
+    LaunchedEffect(token) {
+        if (!token.isNullOrEmpty()) {
+            TokenStore.saveToken(context, token!!)
+            onLoginSuccess()
+        }
+    }
 
     Box(
         modifier = Modifier

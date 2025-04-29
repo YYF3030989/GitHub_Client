@@ -24,4 +24,7 @@ interface GithubApiService {
         @Query("since") since: Int = 1,
         @Query("per_page") perPage: Int = 10
     ): Response<List<GithubEvent>>
+
+    @GET("user")
+    suspend fun getAuthenticatedUser(): GithubUser
 }

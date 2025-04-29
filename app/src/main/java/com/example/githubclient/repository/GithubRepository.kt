@@ -29,4 +29,8 @@ class GithubRepository(private val api: GithubApiService) {
             pagingSourceFactory = { GithubEventPagingSource(api, username) }
         ).flow
     }
+
+    suspend fun getAuthenticatedUser(): GithubUser{
+        return api.getAuthenticatedUser()
+    }
 }

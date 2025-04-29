@@ -1,7 +1,6 @@
 package com.example.githubclient
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -16,6 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.example.githubclient.data.TokenStore
 import com.example.githubclient.data.api.RetrofitClient
 import com.example.githubclient.data.model.GithubUser
 import com.example.githubclient.repository.GithubRepository
@@ -37,15 +38,13 @@ import com.example.githubclient.ui.viewmodel.AuthViewModel
 import com.example.githubclient.ui.viewmodel.GithubEventViewModel
 import com.example.githubclient.ui.viewmodel.GithubUserDetailViewModel
 import com.example.githubclient.ui.viewmodel.GithubUsersViewModel
+import com.example.githubclient.ui.viewmodel.MainViewModel
 import kotlinx.coroutines.flow.flowOf
-import androidx.core.net.toUri
-import androidx.lifecycle.lifecycleScope
-import com.example.githubclient.data.TokenStore
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private lateinit var userViewModel: GithubUsersViewModel
+    private lateinit var mainViewModel: MainViewModel
     private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,31 +56,47 @@ class MainActivity : ComponentActivity() {
             val token by authViewModel.accessToken.collectAsState()
 
             GithubClientTheme {
-                if (token.isNullOrEmpty()) {
-                    AuthScreen(navController, authViewModel)
-                } else {
-                    NavHost(
-                        modifier = Modifier.fillMaxSize(),
-                        navController = navController,
-                        startDestination = "users"
-                    ) {
-                        composable("users") {
-                            GithubUserListScreen(userViewModel, navController)
+                NavHost(
+                    modifier = Modifier.fillMaxSize(),
+                    navController = navController,
+                    startDestination = if (token.isNullOrEmpty()) "auth" else "users"
+                ) {
+                    composable("auth") {
+                        AuthScreen(authViewModel) {
+                            navController.navigate("users") {
+                                popUpTo("auth") { inclusive = true }
+                            }
                         }
-                        composable("user/{userId}/{login}") { backStackEntry ->
-                            val login = backStackEntry.arguments?.getString("login")
-                            val eventViewModel: GithubEventViewModel = viewModel(
-                                factory = GithubEventViewModelFactory(login.toString())
-                            )
-                            val detailViewModel: GithubUserDetailViewModel = viewModel(
-                                factory = GithubUserDetailFactory(GithubRepository(RetrofitClient.api))
-                            )
-                            GithubUserDetailScreen(
-                                login.toString(), detailViewModel, eventViewModel,
-                                onBackClick = {
-                                    navController.popBackStack()
-                                })
-                        }
+                    }
+                    composable("users") {
+                        mainViewModel = MainViewModel(GithubRepository(RetrofitClient.api))
+                        GithubUserListScreen(
+                            userViewModel,
+                            mainViewModel,
+                            navController,
+                            onLogout = {
+                                lifecycleScope.launch {
+                                    TokenStore.clearToken(applicationContext)
+                                }
+                                navController.navigate("auth") {
+                                    popUpTo("users") { inclusive = true }
+                                }
+                            }
+                        )
+                    }
+                    composable("user/{userId}/{login}") { backStackEntry ->
+                        val login = backStackEntry.arguments?.getString("login")
+                        val eventViewModel: GithubEventViewModel = viewModel(
+                            factory = GithubEventViewModelFactory(login.toString())
+                        )
+                        val detailViewModel: GithubUserDetailViewModel = viewModel(
+                            factory = GithubUserDetailFactory(GithubRepository(RetrofitClient.api))
+                        )
+                        GithubUserDetailScreen(
+                            login.toString(), detailViewModel, eventViewModel,
+                            onBackClick = {
+                                navController.popBackStack()
+                            })
                     }
                 }
             }
@@ -92,6 +107,7 @@ class MainActivity : ComponentActivity() {
         Log.d("MainActivity", "onNewIntent called")
         super.onNewIntent(intent)
         val code = intent.data?.getQueryParameter("code")
+        Log.d("MainActivity", "intent.data: ${intent.data}")
         if (code != null) {
             val authViewModel: AuthViewModel by viewModels()
             authViewModel.exchangeCodeForToken(code)
