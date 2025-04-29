@@ -6,6 +6,15 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+val githubPropsFile = rootProject.file("github.properties")
+val githubProps = Properties()
+if (githubPropsFile.exists()) {
+    githubProps.load(githubPropsFile.inputStream())
+}
+
+val clientId = githubProps.getProperty("CLIENT_ID") ?: ""
+val clientSecret = githubProps.getProperty("CLIENT_SECRET") ?: ""
+
 android {
     namespace = "com.example.githubclient"
     compileSdk = 35
@@ -20,10 +29,12 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // TODO: Read GITHUB_API_TOKEN from local.properties. Remove after GithubLogin implementation
-        val localProperties = Properties()
-        localProperties.load(rootProject.file("local.properties").inputStream())
-
-        buildConfigField("String", "GITHUB_API_TOKEN",  "\"${localProperties.getProperty("GITHUB_API_TOKEN")}\"")
+//        val localProperties = Properties()
+//        localProperties.load(rootProject.file("local.properties").inputStream())
+//
+//        buildConfigField("String", "GITHUB_API_TOKEN",  "\"${localProperties.getProperty("GITHUB_API_TOKEN")}\"")
+        buildConfigField("String", "GITHUB_CLIENT_ID", "\"$clientId\"")
+        buildConfigField("String", "GITHUB_CLIENT_SECRET", "\"$clientSecret\"")
     }
 
     buildTypes {
@@ -85,5 +96,11 @@ dependencies {
     // optional - Jetpack Compose integration
     implementation(libs.androidx.paging.compose)
     implementation(libs.androidx.material.icons.extended)
+
+    implementation(libs.java.jwt)
+    implementation (libs.androidx.browser) // For Chrome Custom Tabs
+
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-core:1.0.0")
 
 }

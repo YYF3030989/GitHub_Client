@@ -125,9 +125,20 @@ fun GithubUserDetailScreen(
                 }
 
                 is LoadState.NotLoading -> {
-                    items(count = events.itemCount, key = events.itemKey { it.id }) { index ->
-                        GithubEventItem(event = events[index]!!)
-                        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                    if (events.itemCount == 0){
+                        item {
+                            Text(
+                                text = "No events Recently",
+                                modifier = Modifier.padding(16.dp)
+                            )
+                        }
+                    } else {
+                        items(
+                            count = events.itemCount,
+                            key = events.itemKey { it.id }) { index ->
+                            GithubEventItem(event = events[index]!!)
+                            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                        }
                     }
                 }
 

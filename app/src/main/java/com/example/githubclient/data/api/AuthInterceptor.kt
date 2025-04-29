@@ -1,15 +1,24 @@
 package com.example.githubclient.data.api
 
+import com.example.githubclient.data.TokenStore
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class AuthInterceptor(private val token: String) : Interceptor {
+class AuthInterceptor() : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request().newBuilder()
-            .addHeader("Accept", "application/vnd.github+json")
-            .addHeader("Authorization", "Bearer $token")
-            .addHeader("X-GitHub-Api-Version", "2022-11-28")
-            .build()
+        val token = TokenStore.getCachedToken()
+        val request = if (!token.isNullOrEmpty()) {
+            chain.request().newBuilder()
+                .addHeader("Accept", "application/vnd.github+json")
+                .addHeader("Authorization", "Bearer $token")
+                .addHeader("X-GitHub-Api-Version", "2022-11-28")
+                .build()
+        } else {
+            chain.request().newBuilder()
+                .addHeader("Accept", "application/vnd.github+json")
+                .addHeader("X-GitHub-Api-Version", "2022-11-28")
+                .build()
+        }
         return chain.proceed(request)
     }
 }
