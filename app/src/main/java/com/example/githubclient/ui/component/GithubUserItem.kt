@@ -39,7 +39,7 @@ fun GithubUserItem(user: GithubUser, onClick: (GithubUser) -> Unit) {
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(user.avatar_url)
+                .data(user.avatarUrl)
                 .crossfade(true)
                 .diskCachePolicy(CachePolicy.ENABLED)
                 .build(),
@@ -62,7 +62,7 @@ fun GithubUserItem(user: GithubUser, onClick: (GithubUser) -> Unit) {
                 style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
             )
             Text(
-                text = user.html_url,
+                text = user.htmlUrl,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

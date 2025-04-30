@@ -56,5 +56,16 @@ fun GithubEventItem(event: GithubEvent) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
+
+        Column(
+            horizontalAlignment = Alignment.End,
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = event.createdAt.toString(),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     }
 }

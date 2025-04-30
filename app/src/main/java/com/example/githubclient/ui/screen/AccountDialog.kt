@@ -63,9 +63,9 @@ fun AccountDialog(
                     modifier = Modifier.padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    if (user?.avatar_url != null) {
+                    if (user?.avatarUrl != null) {
                         AsyncImage(
-                            model = user.avatar_url,
+                            model = user.avatarUrl,
                             contentDescription = stringResource(R.string.user_avatar),
                             modifier = Modifier
                                 .size(72.dp)

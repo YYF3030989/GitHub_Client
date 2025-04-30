@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -36,10 +37,9 @@ import com.example.githubclient.ui.viewmodel.MainViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GithubUserListScreen(
-    viewModel: GithubUsersViewModel,
-    mainViewModel: MainViewModel,
-    navController: NavHostController,
-    onLogout: () -> Unit
+    viewModel: GithubUsersViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel = hiltViewModel(),
+    navController: NavHostController
 ) {
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }

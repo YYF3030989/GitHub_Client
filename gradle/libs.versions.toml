@@ -3,7 +3,11 @@ agp = "8.9.0"
 browser = "1.8.0"
 coilCompose = "2.5.0"
 converterGson = "2.9.0"
+datastoreCore = "1.0.0"
 datastorePreferences = "1.1.5"
+datastorePreferencesVersion = "1.0.0"
+hiltAndroid = "2.48"
+hiltNavigationCompose = "1.1.0"
 javaJwt = "3.10.2"
 kotlin = "2.0.21"
 coreKtx = "1.16.0"
@@ -23,9 +27,9 @@ retrofit = "2.9.0"
 [libraries]
 androidx-browser = { module = "androidx.browser:browser", version.ref = "browser" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastorePreferences" }
-androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
-androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastorePreferences" }
+androidx-datastore-core = { module = "androidx.datastore:datastore-core", version.ref = "datastoreCore" }
+androidx-datastore-preferences-v100 = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferencesVersion" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "navigationCompose" }
@@ -34,6 +38,8 @@ androidx-paging-compose = { module = "androidx.paging:paging-compose", version.r
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "pagingRuntime" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltAndroid" }
 java-jwt = { module = "com.auth0:java-jwt", version.ref = "javaJwt" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

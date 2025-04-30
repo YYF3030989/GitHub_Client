@@ -6,12 +6,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.githubclient.data.TokenStore
 import com.example.githubclient.data.model.GithubUser
 import com.example.githubclient.repository.GithubRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel(private val repository: GithubRepository) : ViewModel(){
+@HiltViewModel
+class MainViewModel @Inject constructor(private val repository: GithubRepository) : ViewModel(){
 
     private val _currentUser = MutableStateFlow<GithubUser?>(null)
     val currentUser: StateFlow<GithubUser?> = _currentUser

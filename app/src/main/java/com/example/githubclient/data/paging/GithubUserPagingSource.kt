@@ -1,4 +1,4 @@
-package com.example.githubclient.data.Paging
+package com.example.githubclient.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

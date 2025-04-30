@@ -12,7 +12,7 @@ import com.example.githubclient.data.TokenStore
 import com.example.githubclient.data.api.AuthInterceptor
 import com.example.githubclient.data.api.GitHubAuthService
 import com.example.githubclient.data.api.GithubApiService
-import com.example.githubclient.data.api.RetrofitClient
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -20,8 +20,13 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
-class AuthViewModel(application: Application)  : AndroidViewModel(application) {
+@HiltViewModel
+class AuthViewModel @Inject constructor(
+    application: Application,
+    private val authService: GitHubAuthService
+)  : AndroidViewModel(application) {
 
     private val _accessToken = MutableStateFlow<String?>(null)
     val accessToken: StateFlow<String?> = _accessToken
@@ -34,22 +39,6 @@ class AuthViewModel(application: Application)  : AndroidViewModel(application) {
         }
     }
 
-    private val logging = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
-    }
-
-    private val client = OkHttpClient.Builder()
-        .addInterceptor(logging)
-        .addInterceptor(AuthInterceptor())
-        .build()
-
-    private val authApi: GitHubAuthService = Retrofit.Builder()
-        .baseUrl("https://github.com/")
-        .client(client) // attach the logging client
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-        .create(GitHubAuthService::class.java)
-
     fun getLoginIntent(): Intent {
         val uri =
             "${GithubAuthConstants.TOKEN_URL}?client_id=${BuildConfig.GITHUB_CLIENT_ID}&redirect_uri=${GithubAuthConstants.REDIRECT_URI}&scope=repo".toUri()
@@ -59,7 +48,7 @@ class AuthViewModel(application: Application)  : AndroidViewModel(application) {
     fun exchangeCodeForToken(code: String) {
         viewModelScope.launch {
             try {
-                val response = authApi.getAccessToken(
+                val response = authService.getAccessToken(
                     BuildConfig.GITHUB_CLIENT_ID,
                     BuildConfig.GITHUB_CLIENT_SECRET,
                     code

@@ -1,4 +1,4 @@
-package com.example.githubclient.data.Paging
+package com.example.githubclient.data.paging
 
 import android.util.Log
 import androidx.paging.PagingSource
@@ -12,19 +12,19 @@ class GithubEventPagingSource(
 ) : PagingSource<Int, GithubEvent>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, GithubEvent> {
-        val since = params.key ?: 0 // start from 0 if no key
+        val page = params.key ?: 1
         val perPage = params.loadSize
 
         return try {
-            val response = api.getEvents(username = username, since = since, perPage = perPage)
+            val response = api.getEvents(username = username, page = page, perPage = perPage)
             if (response.isSuccessful) {
                 val events = response.body() ?: emptyList()
-                val nextSince = extractSinceFromLink(response.headers()["Link"])
-                Log.d("GithubEventPagingSource", "nextSince: $nextSince")
+                val nextPage = extractNextFromLink(response.headers()["Link"])
+                Log.d("GithubEventPagingSource", "nextPage: $nextPage")
                 LoadResult.Page(
                     data = events,
-                    prevKey = null, // GitHub API does not support backward paging
-                    nextKey = nextSince
+                    prevKey = if (page == 1) null else page - 1,
+                    nextKey = nextPage
                 )
             } else {
                 LoadResult.Error(Exception("HTTP ${response.code()}"))
@@ -38,9 +38,9 @@ class GithubEventPagingSource(
         return null
     }
 
-    private fun extractSinceFromLink(LinkHeader: String?): Int? {
-        if (LinkHeader == null) return null
+    private fun extractNextFromLink(linkHeader: String?): Int? {
+        if (linkHeader == null) return null
         val regex = Regex("""<[^>]*[?&]page=(\d+)[^>]*>; rel="next"""")
-        return regex.find(LinkHeader)?.groupValues?.get(1)?.toIntOrNull()
+        return regex.find(linkHeader)?.groupValues?.get(1)?.toIntOrNull()
     }
 }

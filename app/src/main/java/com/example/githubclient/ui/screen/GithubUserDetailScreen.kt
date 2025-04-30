@@ -40,6 +40,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
@@ -53,8 +54,8 @@ import com.example.githubclient.ui.viewmodel.GithubUserDetailViewModel
 @Composable
 fun GithubUserDetailScreen(
     username: String,
-    userDetailViewModel: GithubUserDetailViewModel,
-    userEventsViewModel: GithubEventViewModel,
+    userDetailViewModel: GithubUserDetailViewModel = hiltViewModel(),
+    userEventsViewModel: GithubEventViewModel = hiltViewModel(),
     onBackClick : () -> Unit
 ) {
     val events = userEventsViewModel.events.collectAsLazyPagingItems()

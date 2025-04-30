@@ -3,14 +3,16 @@ package com.example.githubclient.ui.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.githubclient.data.api.RetrofitClient
 import com.example.githubclient.data.model.GithubUserDetail
 import com.example.githubclient.repository.GithubRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class GithubUserDetailViewModel(private val repository: GithubRepository): ViewModel() {
+@HiltViewModel
+class GithubUserDetailViewModel @Inject constructor(private val repository: GithubRepository): ViewModel() {
 
     private val _userDetail = MutableStateFlow<GithubUserDetail?>(null)
     val userDetail: StateFlow<GithubUserDetail?> = _userDetail

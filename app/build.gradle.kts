@@ -4,6 +4,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
+
 }
 
 val githubPropsFile = rootProject.file("github.properties")
@@ -100,7 +103,13 @@ dependencies {
     implementation(libs.java.jwt)
     implementation (libs.androidx.browser) // For Chrome Custom Tabs
 
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-    implementation("androidx.datastore:datastore-core:1.0.0")
+    implementation(libs.androidx.datastore.preferences.v100)
+    implementation(libs.androidx.datastore.core)
 
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+
+    // (Optional) For Hilt ViewModel support
+    implementation(libs.androidx.hilt.navigation.compose)
 }
