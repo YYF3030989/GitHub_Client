@@ -8,6 +8,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class GithubUsersViewModel @Inject constructor(private val repository: GithubRepository) : ViewModel(){
+class GithubUsersViewModel @Inject constructor(repository: GithubRepository) : ViewModel(){
     val users = repository.getPagedUsers().cachedIn(viewModelScope)
 }

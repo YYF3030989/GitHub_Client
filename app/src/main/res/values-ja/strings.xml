@@ -9,4 +9,6 @@
     <string name="logout">ログアウト</string>
     <string name="error_loading_more_items">読み取りエラー</string>
     <string name="event_suffix">イベント</string>
+    <string name="Followers">フォロワー</string>
+    <string name="Following">フォロー</string>
 </resources>

@@ -7,19 +7,13 @@ import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.githubclient.BuildConfig
-import com.example.githubclient.ui.common.GithubAuthConstants
 import com.example.githubclient.data.TokenStore
-import com.example.githubclient.data.api.AuthInterceptor
 import com.example.githubclient.data.api.GitHubAuthService
-import com.example.githubclient.data.api.GithubApiService
+import com.example.githubclient.ui.common.GithubAuthConstants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
 @HiltViewModel

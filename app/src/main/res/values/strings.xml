@@ -13,4 +13,6 @@
     <string name="id" translatable="false">ID: </string>
     <string name="detail_name" translatable="false">Name: </string>
     <string name="event_suffix">Event</string>
+    <string name="Followers">Followers</string>
+    <string name="Following">Following</string>
 </resources>

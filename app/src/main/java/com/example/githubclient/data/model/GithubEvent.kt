@@ -21,7 +21,7 @@ data class Payload(
 
 data class Release(
     val name: String?,
-    val tag_name: String?,
-    val html_url: String,
+    @SerializedName("tag_name") val tagName: String?,
+    @SerializedName("html_url") val htmlUrl: String,
     val body: String?
 )
