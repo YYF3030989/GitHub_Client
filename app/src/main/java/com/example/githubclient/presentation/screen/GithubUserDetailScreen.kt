@@ -55,6 +55,8 @@ fun GithubUserDetailScreen(
 ) {
     val events = userEventsViewModel.events.collectAsLazyPagingItems()
     val detail = userDetailViewModel.userDetail.collectAsState()
+    val isEndReached = events.loadState.append is LoadState.NotLoading && events.loadState.append.endOfPaginationReached
+
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
@@ -124,10 +126,17 @@ fun GithubUserDetailScreen(
                 is LoadState.NotLoading -> {
                     if (events.itemCount == 0){
                         item {
-                            Text(
-                                text = stringResource(R.string.no_events_recently),
-                                modifier = Modifier.padding(16.dp)
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.no_events_recently),
+                                    modifier = Modifier.padding(16.dp)
+                                )
+                            }
                         }
                     } else {
                         items(
@@ -135,6 +144,42 @@ fun GithubUserDetailScreen(
                             key = events.itemKey { it.id }) { index ->
                             GithubEventItem(event = events[index]!!)
                             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                        }
+
+                        if (events.loadState.append is LoadState.Loading) {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    CircularProgressIndicator()
+                                }
+                            }
+                        }
+
+                        if (events.loadState.append is LoadState.Error) {
+                            item {
+                                Text("Error loading more items. Tap to retry.")
+                            }
+                        }
+
+                        if (isEndReached && events.itemCount > 0) {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.end_indicator),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = Color.Gray
+                                    )
+                                }
+                            }
                         }
                     }
                 }
