@@ -11,4 +11,5 @@
     <string name="event_suffix">イベント</string>
     <string name="Followers">フォロワー</string>
     <string name="Following">フォロー</string>
+    <string name="end_indicator">以上です</string>
 </resources>

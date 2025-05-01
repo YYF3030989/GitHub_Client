@@ -15,4 +15,5 @@
     <string name="event_suffix">Event</string>
     <string name="Followers">Followers</string>
     <string name="Following">Following</string>
+    <string name="end_indicator">You\'ve reached the end</string>
 </resources>
