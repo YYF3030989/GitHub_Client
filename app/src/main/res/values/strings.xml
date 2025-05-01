@@ -16,4 +16,5 @@
     <string name="Followers">Followers</string>
     <string name="Following">Following</string>
     <string name="end_indicator">You\'ve reached the end</string>
+    <string name="github_para_error_msg">GitHub Client ID or secret is not configured. Please check your settings.</string>
 </resources>

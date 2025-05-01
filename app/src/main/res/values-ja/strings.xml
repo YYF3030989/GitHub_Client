@@ -12,4 +12,5 @@
     <string name="Followers">フォロワー</string>
     <string name="Following">フォロー</string>
     <string name="end_indicator">以上です</string>
+    <string name="github_para_error_msg">GitHubのClient IDやsecretが不明のため、\n 指定してください</string>
 </resources>
