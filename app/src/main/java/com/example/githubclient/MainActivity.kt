@@ -16,11 +16,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.githubclient.ui.screen.AuthScreen
-import com.example.githubclient.ui.screen.GithubUserDetailScreen
-import com.example.githubclient.ui.screen.GithubUserListScreen
+import com.example.githubclient.presentation.screen.AuthScreen
+import com.example.githubclient.presentation.screen.GithubUserDetailScreen
+import com.example.githubclient.presentation.screen.GithubUserListScreen
 import com.example.githubclient.ui.theme.GithubClientTheme
-import com.example.githubclient.ui.viewmodel.AuthViewModel
+import com.example.githubclient.presentation.viewmodel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
