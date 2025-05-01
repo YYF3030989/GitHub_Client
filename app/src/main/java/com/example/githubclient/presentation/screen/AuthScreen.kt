@@ -1,5 +1,6 @@
 package com.example.githubclient.presentation.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -43,6 +44,12 @@ fun AuthScreen(
         Button(
             onClick = {
                 val intent = authViewModel.getLoginIntent()
+                if (intent == null) {
+                    Toast.makeText(context,
+                        context.getString(R.string.github_para_error_msg),
+                        Toast.LENGTH_LONG).show()
+                    return@Button
+                }
                 context.startActivity(intent)
             }
         ) {

@@ -33,7 +33,10 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun getLoginIntent(): Intent {
+    fun getLoginIntent(): Intent? {
+        val clientId = BuildConfig.GITHUB_CLIENT_ID
+        val secret = BuildConfig.GITHUB_CLIENT_SECRET
+        if (clientId.isBlank() || secret.isBlank()) return null
         val uri =
             "${GithubAuthConstants.TOKEN_URL}?client_id=${BuildConfig.GITHUB_CLIENT_ID}&redirect_uri=${GithubAuthConstants.REDIRECT_URI}&scope=repo".toUri()
         return Intent(Intent.ACTION_VIEW, uri)
