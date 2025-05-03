@@ -1,6 +1,5 @@
 package com.example.githubclient
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -8,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -19,8 +19,8 @@ import androidx.navigation.navArgument
 import com.example.githubclient.presentation.screen.AuthScreen
 import com.example.githubclient.presentation.screen.GithubUserDetailScreen
 import com.example.githubclient.presentation.screen.GithubUserListScreen
-import com.example.githubclient.ui.theme.GithubClientTheme
 import com.example.githubclient.presentation.viewmodel.AuthViewModel
+import com.example.githubclient.ui.theme.GithubClientTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,12 +33,22 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             val token by authViewModel.accessToken.collectAsState()
+            val isGuest by authViewModel.isGuest.collectAsState()
+
+            LaunchedEffect(token, isGuest) {
+                val isLoggedOut = token.isNullOrEmpty() && !isGuest
+                if (isLoggedOut) {
+                    navController.navigate("auth") {
+                        popUpTo("users") { inclusive = true }
+                    }
+                }
+            }
 
             GithubClientTheme {
                 NavHost(
                     modifier = Modifier.fillMaxSize(),
                     navController = navController,
-                    startDestination = if (token.isNullOrEmpty()) "auth" else "users"
+                    startDestination = if (token.isNullOrEmpty() && !isGuest) "auth" else "users"
                 ) {
                     composable("auth") {
                         AuthScreen {
@@ -49,7 +59,11 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("users") {
                         GithubUserListScreen(
-                            navController = navController
+                            navController = navController,
+                            onLogout = {
+                                Log.d("MainActivity", "Logging out")
+                                authViewModel.logout(this@MainActivity)
+                            }
                         )
                     }
                     composable(
@@ -65,17 +79,6 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-        }
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        Log.d("MainActivity", "onNewIntent called")
-        super.onNewIntent(intent)
-        val code = intent.data?.getQueryParameter("code")
-        Log.d("MainActivity", "intent.data: ${intent.data}")
-        if (code != null) {
-            val authViewModel: AuthViewModel by viewModels()
-            authViewModel.exchangeCodeForToken(code)
         }
     }
 }

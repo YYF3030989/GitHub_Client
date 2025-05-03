@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.githubclient.core.util.TokenStore
+import com.example.githubclient.data.model.ApiResult
 import com.example.githubclient.data.model.GithubUser
 import com.example.githubclient.domin.repository.GithubRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,20 +25,15 @@ class MainViewModel @Inject constructor(private val repository: GithubRepository
             val token = TokenStore.accessTokenFlow(context).firstOrNull()
             if (!token.isNullOrBlank()) {
                 try {
-                    val user = repository.getAuthenticatedUser()
-                    _currentUser.value = user
+                    val result = repository.getAuthenticatedUser()
+                    if (result is ApiResult.Success) {
+                        _currentUser.value = result.data
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
                     _currentUser.value = null
                 }
             }
-        }
-    }
-
-    fun logout(context: Context) {
-        viewModelScope.launch {
-            TokenStore.clearToken(context)
-            _currentUser.value = null
         }
     }
 }

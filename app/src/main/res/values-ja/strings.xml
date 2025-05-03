@@ -12,5 +12,13 @@
     <string name="Followers">フォロワー</string>
     <string name="Following">フォロー</string>
     <string name="end_indicator">以上です</string>
-    <string name="github_para_error_msg">GitHubのClient IDやsecretが不明のため、\n 指定してください</string>
+    <string name="guest">ゲスト</string>
+    <string name="device_code_input_instructor">ブラウザで以下のコードを入力してログインしてください</string>
+    <string name="login_as_guest">ゲストとしてログイン</string>
+    <string name="logging_in">ログイン処理中..</string>
+    <string name="browser_login_waiting_text">認証中、ブラウザでログイン操作を完了してください</string>
+    <string name="cancel">キャンセル</string>
+    <string name="error_loading_text">情報ローディングエラー</string>
+    <string name="open_link_error">このリンクをアクセスできない</string>
+    <string name="initializing_github_login">ログイン処理中…</string>
 </resources>

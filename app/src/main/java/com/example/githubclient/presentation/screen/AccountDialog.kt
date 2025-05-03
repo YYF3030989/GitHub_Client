@@ -83,11 +83,19 @@ fun AccountDialog(
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    Text(
-                        text = user?.login ?: stringResource(R.string.text_placeholder),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
-                    )
+                    if (user != null) {
+                        Text(
+                            text = user.login,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp
+                        )
+                    } else {
+                        Text(
+                            text = stringResource(R.string.guest),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp
+                        )
+                    }
 
                     Spacer(modifier = Modifier.height(24.dp))
 

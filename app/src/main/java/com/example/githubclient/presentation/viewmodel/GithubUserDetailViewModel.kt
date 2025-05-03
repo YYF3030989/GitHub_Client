@@ -3,6 +3,7 @@ package com.example.githubclient.presentation.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.githubclient.data.model.ApiResult
 import com.example.githubclient.data.model.GithubUserDetail
 import com.example.githubclient.domin.repository.GithubRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,12 +19,12 @@ class GithubUserDetailViewModel @Inject constructor(private val repository: Gith
     val userDetail: StateFlow<GithubUserDetail?> = _userDetail
 
     fun loadUserDetail(username: String) {
-        Log.d("GithubUserDetailViewModel", "Loading user detail for username: $username")
         viewModelScope.launch {
             try {
-                val detail = repository.getUserDetail(username)
-                _userDetail.value = detail
-                Log.d("GithubUserDetailViewModel", "User detail loaded: $detail")
+                val result = repository.getUserDetail(username)
+                if (result is ApiResult.Success) {
+                    _userDetail.value = result.data
+                }
             } catch (e: Exception) {
                 Log.e("GithubUserDetailViewModel", "Error loading user detail", e)
                 _userDetail.value = null

@@ -9,12 +9,18 @@
     <string name="github_user_list_topbar_text">Github User List</string>
     <string name="logout">Logout</string>
     <string name="error_loading_more_items">Error loading more items</string>
-    <string name="detail_username" translatable="false">Username: </string>
-    <string name="id" translatable="false">ID: </string>
-    <string name="detail_name" translatable="false">Name: </string>
     <string name="event_suffix">Event</string>
     <string name="Followers">Followers</string>
     <string name="Following">Following</string>
     <string name="end_indicator">You\'ve reached the end</string>
-    <string name="github_para_error_msg">GitHub Client ID or secret is not configured. Please check your settings.</string>
+    <string name="guest">Guest</string>
+    <string name="device_code_input_instructor">To authorize, please open the link below and enter the code:</string>
+    <string name="login_as_guest">Continue as Guest</string>
+    <string name="initializing_github_login">Initializing GitHub login…</string>
+    <string name="logging_in">Logging in…</string>
+    <string name="browser_login_waiting_text">Waiting for authorization. Please complete login in your browser.</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="error_loading_text">Error loading more items</string>
+    <string name="open_link_error">Unable to open link</string>
 </resources>
