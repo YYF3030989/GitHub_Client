@@ -1,4 +1,4 @@
-package com.example.githubclient
+package com.example.githubclient.presentation.main
 
 import android.os.Bundle
 import android.util.Log
@@ -7,9 +7,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
 
             GithubClientTheme {
                 NavHost(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.Companion.fillMaxSize(),
                     navController = navController,
                     startDestination = if (token.isNullOrEmpty() && !isGuest) "auth" else "users"
                 ) {
@@ -68,7 +68,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(
                         route = "user/{userId}/{login}",
-                        arguments = listOf(navArgument("login") { type = NavType.StringType })
+                        arguments = listOf(navArgument("login") {
+                            type = NavType.Companion.StringType
+                        })
                     ) { backStackEntry ->
                         val login = backStackEntry.arguments?.getString("login")
                         GithubUserDetailScreen(

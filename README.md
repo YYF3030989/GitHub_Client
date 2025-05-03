@@ -2,8 +2,6 @@
 
 A modern Android application built with Kotlin and Jetpack Compose, designed to explore GitHub users and their public activities. This project demonstrates clean architecture, efficient paging, OAuth login integration, and localization support — optimized for performance and scalability.
 
-![screenshot](./screenshots/github_client_ui.png)
-
 ## Why This Project?
 This app was built to deepen my Android development skills and demonstrate:
 - **Clean architecture principles**
@@ -18,6 +16,7 @@ This app was built to deepen my Android development skills and demonstrate:
 - **User Detail Page** showing user profile and latest events
 - **Event Feed** with lazy loading (pagination) using Paging 3
 - **GitHub OAuth Login** with secure token handling
+- **Guest Login** preview app without github account login
 - **Localization Support** (English & Japanese)
 - **Dependency Injection** using Hilt
 - **Unit-Testable Architecture** with repository pattern
@@ -104,7 +103,8 @@ Looking for new challenges in mobile innovation — feel free to [connect on Lin
 
 ## 🖼️ UI Preview
 
-![screenshot](./screenshots/github_client_ui.png)
+![screenshot](./screenshots/user_list.png)
+![screenshot](./screenshots/user_detail.png)
 
 ---
 
