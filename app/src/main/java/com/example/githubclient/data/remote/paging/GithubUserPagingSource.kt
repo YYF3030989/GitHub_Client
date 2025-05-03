@@ -1,41 +1,31 @@
 package com.example.githubclient.data.remote.paging
 
-import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.githubclient.data.remote.api.GithubApiService
 import com.example.githubclient.data.model.GithubUser
+import okhttp3.Headers
+import retrofit2.Response
 
 class GithubUserPagingSource (
     private val api: GithubApiService
-) : PagingSource<Int, GithubUser>() {
+) : BaseGithubPagingSource<Int, GithubUser>() {
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, GithubUser> {
-        val since = params.key ?: 0 // start from 0 if no key
+    override suspend fun executeRequest(params: LoadParams<Int>): Response<List<GithubUser>> {
+        val since = params.key ?: 0
         val perPage = params.loadSize
+        return api.getUserList(since = since, perPage = perPage)
+    }
 
-        return try {
-            val response = api.getUserList(since = since, perPage = perPage)
-            if (response.isSuccessful) {
-                val users = response.body() ?: emptyList()
-                val nextSince = extractSinceFromLink(response.headers()["Link"])
-                LoadResult.Page(
-                    data = users,
-                    prevKey = null, // GitHub API does not support backward paging
-                    nextKey = nextSince
-                )
-            } else {
-                LoadResult.Error(Exception("HTTP ${response.code()}"))
-            }
-        } catch (e: Exception) {
-            LoadResult.Error(e)
-        }
+    override fun getPreviousKey(params: LoadParams<Int>): Int? = null
+
+    override fun getNextKey(
+        headers: Headers,
+        params: LoadParams<Int>
+    ): Int? {
+        val link = headers["Link"] ?: return null
+        val regex = Regex("""<[^>]*[?&]since=(\d+)[^>]*>; rel="next"""")
+        return regex.find(link)?.groupValues?.get(1)?.toIntOrNull()
     }
 
     override fun getRefreshKey(state: PagingState<Int, GithubUser>): Int? = null
-
-    private fun extractSinceFromLink(linkHeader: String?): Int? {
-        if (linkHeader == null) return null
-        val regex = Regex("""<[^>]*[?&]since=(\d+)[^>]*>; rel="next"""")
-        return regex.find(linkHeader)?.groupValues?.get(1)?.toIntOrNull()
-    }
 }

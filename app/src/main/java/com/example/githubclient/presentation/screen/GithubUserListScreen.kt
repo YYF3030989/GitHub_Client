@@ -1,6 +1,5 @@
 package com.example.githubclient.presentation.screen
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,8 +12,11 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,12 +41,31 @@ import com.example.githubclient.presentation.viewmodel.MainViewModel
 fun GithubUserListScreen(
     viewModel: GithubUsersViewModel = hiltViewModel(),
     mainViewModel: MainViewModel = hiltViewModel(),
-    navController: NavHostController
+    navController: NavHostController,
+    onLogout: () -> Unit
 ) {
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }
     val users = viewModel.users.collectAsLazyPagingItems()
+    val message by viewModel.uiMessage.collectAsState()
+
+    LaunchedEffect(users.loadState) {
+        viewModel.handleLoadState(users.loadState)
+    }
+
     Scaffold(
+        snackbarHost = {
+            message?.let {
+                Snackbar(
+                    modifier = Modifier.padding(8.dp),
+                    action = {
+                        TextButton(onClick = { viewModel.clearMessage() }) {
+                            Text(stringResource(R.string.ok))
+                        }
+                    }
+                ) { Text(it) }
+            }
+        },
         modifier = Modifier.fillMaxSize(),
         topBar = {
             CenterAlignedTopAppBar (
@@ -69,7 +90,6 @@ fun GithubUserListScreen(
         ) {
             items(count = users.itemCount, key = users.itemKey { it.id }) { index ->
                 GithubUserItem(user = users[index]!!, onClick = {
-                    Log.d("MainActivity", "User clicked: ${it.login}")
                     navController.navigate("user/${it.id}/${it.login}")
                 })
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -95,10 +115,7 @@ fun GithubUserListScreen(
         AccountDialog(
             user = user,
             onDismiss = { showDialog = false },
-            onLogout = {
-                mainViewModel.logout(context)
-                showDialog = false
-            }
+            onLogout = onLogout
         )
     }
 }

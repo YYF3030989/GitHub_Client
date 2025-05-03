@@ -1,7 +1,5 @@
 package com.example.githubclient.presentation.screen
 
-import android.content.Intent
-import android.widget.Toast
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -44,6 +43,7 @@ fun AuthScreen(
     val token by authViewModel.accessToken.collectAsState()
     val deviceCodeInfo by authViewModel.deviceCodeInfo.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
+    val GITHUB_DEVICE_LOGIN_URL = "https://github.com/login/device"
 
     LaunchedEffect(token) {
         if (!token.isNullOrEmpty()) {
@@ -67,7 +67,7 @@ fun AuthScreen(
         ) {
             if (deviceCodeInfo != null) {
                 Text(
-                    text = "To authorize, please open the link below and enter the code:",
+                    text = stringResource(R.string.device_code_input_instructor),
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -85,19 +85,11 @@ fun AuthScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Button(
+                    modifier = Modifier.width(220.dp),
                     onClick = {
                         authViewModel.pollForAccessToken(deviceCodeInfo!!)
                         showDialog = true
-//                val intent = authViewModel.getLoginIntent()
-//                if (intent == null) {
-//                    Toast.makeText(context,
-//                        context.getString(R.string.github_para_error_msg),
-//                        Toast.LENGTH_LONG).show()
-//                    return@Button
-//                }
-//                context.startActivity(intent)
-                        val uri = "https://github.com/login/device".toUri()
-
+                        val uri = GITHUB_DEVICE_LOGIN_URL.toUri()
 
                         val customTabsIntent = CustomTabsIntent.Builder()
                             .setShowTitle(true)
@@ -110,13 +102,19 @@ fun AuthScreen(
 
                 Spacer(Modifier.height(8.dp))
 
-                OutlinedButton(onClick = { onLoginSuccess() }) {
-                    Text("Continue as Guest")
+                OutlinedButton(
+                    modifier = Modifier.width(220.dp),
+                    onClick = {
+                        authViewModel.loginAsGuest(context)
+                        onLoginSuccess()
+                    }
+                ) {
+                    Text(stringResource(R.string.login_as_guest))
                 }
 
             } else {
                 CircularProgressIndicator()
-                Text("Initializing GitHub login...")
+                Text(stringResource(R.string.initializing_github_login))
             }
 
             if (showDialog) {
@@ -125,12 +123,12 @@ fun AuthScreen(
                         authViewModel.cancelPolling()
                         showDialog = false
                     },
-                    title = { Text("Logging in...") },
+                    title = { Text(stringResource(R.string.logging_in)) },
                     text = {
                         Column {
                             CircularProgressIndicator()
                             Spacer(Modifier.height(8.dp))
-                            Text("Waiting for authorization. Please complete login in your browser.")
+                            Text(stringResource(R.string.browser_login_waiting_text))
                         }
                     },
                     confirmButton = {},
@@ -139,7 +137,7 @@ fun AuthScreen(
                             authViewModel.cancelPolling()
                             showDialog = false
                         }) {
-                            Text(text = "Cancel")
+                            Text(text = stringResource(R.string.cancel))
                         }
                     }
                 )

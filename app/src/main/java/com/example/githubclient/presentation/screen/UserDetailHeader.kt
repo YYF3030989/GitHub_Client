@@ -40,7 +40,9 @@ fun UserDetailHeader(detail: GithubUserDetail?) {
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
     Box(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         contentAlignment = Alignment.Center
     ) {
         Card(
@@ -89,7 +91,8 @@ fun UserDetailHeader(detail: GithubUserDetail?) {
                             try {
                                 uriHandler.openUri(url)
                             } catch (e: Exception) {
-                                Toast.makeText(context, "Unable to open link", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context,
+                                    context.getString(R.string.open_link_error), Toast.LENGTH_SHORT).show()
                             }
                         }
                     ) {
